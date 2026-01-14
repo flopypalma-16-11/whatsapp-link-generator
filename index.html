@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Links WhatsApp 🟢</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <style>
+        
+        body {
+            background-color: #e5ddd5; /* Color de fondo típico de WhatsApp */
+            font-family: 'Poppins', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0;
+        }
+
+        .tarjeta {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 { color: #075e54; margin-bottom: 20px; font-size: 1.5rem; }
+
+        label { display: block; text-align: left; margin-top: 15px; font-weight: bold; color: #555; }
+        
+        input, textarea {
+            width: 100%; padding: 10px; margin-top: 5px;
+            border: 2px solid #ddd; border-radius: 8px;
+            box-sizing: border-box; /* Para que el padding no rompa el ancho */
+            font-family: inherit;
+        }
+
+        button {
+            background-color: #25d366; /* Verde WhatsApp */
+            color: white; border: none;
+            width: 100%; padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px; font-weight: bold; font-size: 1rem;
+            cursor: pointer; transition: background 0.3s;
+        }
+
+        button:hover { background-color: #128c7e; }
+
+        
+        #resultado {
+            margin-top: 20px;
+            display: none; /* Oculto al principio */
+            background: #f0f0f0; padding: 10px; border-radius: 8px;
+            word-break: break-all; /* Para que el link largo no rompa la caja */
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tarjeta">
+        <h1>🔗 Link Generator</h1>
+        
+        <label>📞 Tu Teléfono (con prefijo):</label>
+        <input type="text" id="telefono" placeholder="Ej: 34 666 555 444">
+
+        <label>💬 Mensaje (Opcional):</label>
+        <textarea id="mensaje" rows="3" placeholder="Hola, cuentame lo que haces..."></textarea>
+
+        <button id="btnGenerar">Generar Link y QR</button>
+
+        <div id="resultado">
+            <p>Tu link:</p>
+            <a href="#" id="linkGenerado" target="_blank" style="color: #075e54; font-weight: bold;">...</a>
+            <button id="btnCopiar" style="background: #555; margin-top: 10px; font-size: 0.8rem; padding: 5px;">📋 Copiar Link</button>
+            <div id="contenedorQR" style="display: flex; justify-content: center; margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+       
+    const inputTelefono = document.querySelector("#telefono");
+    const inputMensaje = document.querySelector("#mensaje");
+    const boton = document.querySelector("#btnGenerar");
+    const cajaResultado = document.querySelector("#resultado");
+    const etiquetaLink = document.querySelector("#linkGenerado");
+    const contenedorQR = document.querySelector("#contenedorQR");
+    const btnCopiar = document.querySelector("#btnCopiar");
+
+    
+    boton.addEventListener("click", function() {
+        
+        //  Capturar los valores
+        const telefonoSucio = inputTelefono.value;
+        const textoUsuario = inputMensaje.value;
+        
+
+        //  LIMPIEZA CON REGEX 
+        // La expresión /[^0-9]/g significa: "Busca todo lo que NO (^) sea número (0-9)"
+        // Y reemplázalo por "" (nada). O sea, bórralo.
+        const telefonoLimpio = telefonoSucio.replace(/[^0-9]/g, "");
+
+        // CODIFICAR EL MENSAJE
+        // Las URLs no entienden espacios. "Hola mundo" rompe el link.
+        // encodeURIComponent convierte " " en "%20" y cosas así.
+        const textoCodificado = encodeURIComponent(textoUsuario);
+
+        //  CONSTRUIR LA URL FINAL
+        // Usamos las comillas invertidas (backticks) para mezclar variables
+        const urlFinal = `https://wa.me/${telefonoLimpio}?text=${textoCodificado}`;
+
+        //  MOSTRAR EL RESULTADO
+        // 1. Ponemos el link en el href para que funcione al clicar
+        etiquetaLink.href = urlFinal;
+        // 2. Escribimos el link para que el usuario lo vea
+        etiquetaLink.innerText = urlFinal;
+        // 3. Quitamos el display: none para que aparezca la caja gris
+        cajaResultado.style.display = "block";
+
+        //  GENERAR EL QR ---
+        // Primero borramos si había un QR anterior para que no se acumulen
+        contenedorQR.innerHTML = ""; 
+        
+        // Usamos la librería que importamos en el HEAD
+        // new QRCode(dónde_pintarlo, qué_texto_pintar)
+        new QRCode(contenedorQR, {
+            text: urlFinal,
+            width: 128,
+            height: 128
+        });
+
+    });
+
+    // COPIAR AL PORTAPAPELES ---
+    btnCopiar.addEventListener("click", function() {
+        // Leemos el link que ya generamos
+        const linkParaCopiar = etiquetaLink.innerText;
+        
+        // API del Navegador: navigator.clipboard
+        navigator.clipboard.writeText(linkParaCopiar).then(() => {
+            // Esto es una promesa (lo veremos en el curso de asincronía)
+            // Significa: "Cuando hayas terminado de copiar, haz esto:"
+            alert("¡Link copiado! Ya puedes pegarlo donde quieras.");
+        });
+    });
+
+        console.log("Link generado: ", urlFinal);
+    ;
+        console.log("¡Todo listo para empezar!");
+    </script>
+
+</body>
+</html>
