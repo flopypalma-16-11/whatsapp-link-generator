@@ -2,8 +2,7 @@
 
 Herramienta web gratuita para generar enlaces directos de WhatsApp (`wa.me`) con mensaje predefinido y código QR descargable. Ideal para negocios, perfiles de Instagram y atención al cliente.
 
-🔗 **[Ver Demo en Funcionamiento](AQUÍ_PONDRAS_TU_LINK_DE_GITHUB_PAGES_LUEGO)**
-
+🔗🔗 **[Ver Demo en Funcionamiento](https://flopypalma-16-11.github.io/whatsapp-link-generator/)**
 ## 🚀 Funcionalidades
 
 - **Limpieza de Datos:** Sanitización de números de teléfono usando **Expresiones Regulares (Regex)** para evitar errores en la API de WhatsApp.
