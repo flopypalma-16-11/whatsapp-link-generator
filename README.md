@@ -18,4 +18,4 @@ Herramienta web gratuita para generar enlaces directos de WhatsApp (`wa.me`) con
 - **Librerías:** [QRCode.js](https://davidshimjs.github.io/qrcodejs/).
 
 ---
-Hecho con 💚 por **Florencia**
+Hecho con 💚 por **Florencia**# whatsapp-link-generator
